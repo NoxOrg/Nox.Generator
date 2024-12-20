@@ -76,6 +76,7 @@ public class TestDatabaseContainerService : IAsyncLifetime, ITestDatabaseService
 
             case DatabaseServerProvider.SqlServer:
                 var sqlContainer = new MsSqlBuilder()
+                .WithImage("mcr.microsoft.com/mssql/server:2022-CU14-ubuntu-22.04")
                 .WithAutoRemove(true)
                 .WithCleanUp(true)
                 .Build();
