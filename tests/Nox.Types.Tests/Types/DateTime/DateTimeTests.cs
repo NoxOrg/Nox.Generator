@@ -278,14 +278,17 @@ public class DateTimeTests
     }
 
     [Theory]
-    [InlineData("en-GB", "20/06/2023 10:05:00 +01:00")]
-    [InlineData("en-US", "6/20/2023 10:05:00 AM +01:00")]
-    public void ToString_WithCultureParameter_ReturnsFormattedString(string culture, string expectedResult)
+    [InlineData("en-GB")]
+    [InlineData("en-US")]
+    public void ToString_WithCultureParameter_ReturnsFormattedString(string culture)
     {
         var dateTime = DateTime.From(new DateTimeOffset(2023, 6, 20, 10, 5, 0, 0, new TimeSpan(1,0,0)));
+
+        var nativeFormattingOutput = new DateTimeOffset(2023, 6, 20, 10, 5, 0, 0, new TimeSpan(1, 0, 0)).ToString(new CultureInfo(culture));
+        
         var dateTimeString = dateTime.ToString(new CultureInfo(culture));
 
-        Assert.Equal(expectedResult, dateTimeString);
+        Assert.Equal(nativeFormattingOutput, dateTimeString);
     }
 
     [Fact]

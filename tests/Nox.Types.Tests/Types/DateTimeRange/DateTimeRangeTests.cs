@@ -346,19 +346,23 @@ public class DateTimeRangeTests
     }
 
     [Theory]
-    [InlineData("en-GB", "20/06/2023 10:05:00 +08:00 - 20/08/2023 10:05:00 +00:00")]
-    [InlineData("en-US", "6/20/2023 10:05:00 AM +08:00 - 8/20/2023 10:05:00 AM +00:00")]
-    public void ToString_WithCultureParameter_ReturnsFormattedString(string culture, string expectedResult)
+    [InlineData("en-GB")]
+    [InlineData("en-US")]
+    public void ToString_WithCultureParameter_ReturnsFormattedString(string culture)
     {
         void Test()
         {
             var start = new DateTimeOffset(2023, 6, 20, 10, 5, 0, TimeSpan.FromHours(8));
             var end = new DateTimeOffset(2023, 8, 20, 10, 5, 0, TimeSpan.Zero);
 
+            var startNativeFormattingOutput = new DateTimeOffset(2023, 6, 20, 10, 5, 0, 0, new System.TimeSpan(8, 0, 0)).ToString(new CultureInfo(culture));
+            var endNativeFormattingOutput = new DateTimeOffset(2023, 8, 20, 10, 5, 0, System.TimeSpan.Zero).ToString(new CultureInfo(culture));
+            var nativeFormattingOutput = $"{startNativeFormattingOutput} - {endNativeFormattingOutput}";
+
             var dateTimeRange = DateTimeRange.From(start, end);
             var dateTimeRangeString = dateTimeRange.ToString(new CultureInfo(culture));
 
-            dateTimeRangeString.Should().Be(expectedResult);
+            dateTimeRangeString.Should().Be(nativeFormattingOutput);
         }
 
         TestUtility.RunInInvariantCulture(Test);
