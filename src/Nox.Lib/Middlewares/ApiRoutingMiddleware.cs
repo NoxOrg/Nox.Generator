@@ -54,7 +54,8 @@ internal class ApiRoutingMiddleware
             return;
         }
 
-        var apiRouteMatcher = matchers.FirstOrDefault(m => m.Match(context.Request));
+        IDictionary<string, string>? paramValues = null;
+        var apiRouteMatcher = matchers.Find(m => m.Match(context.Request, out paramValues));
 
         if (apiRouteMatcher == null)
         {
@@ -62,8 +63,7 @@ internal class ApiRoutingMiddleware
             return;
         }
 
-        var translatedTarget = apiRouteMatcher.TransformTo(apiRouteMatcher.ApiRoute.TargetUrl);
-
+        var translatedTarget = apiRouteMatcher.TransformTo(apiRouteMatcher.ApiRoute.TargetUrl, paramValues);
 
         if (translatedTarget.Contains($"&{{$RouteQuery}}"))
         {
@@ -87,5 +87,4 @@ internal class ApiRoutingMiddleware
         await _next(context);
         return;
     }
-
 }

@@ -235,9 +235,9 @@ public class TimeTests
     }
 
     [Theory]
-    [InlineData("en-GB", "03:05:52")]
-    [InlineData("en-US", "3:05:52 AM")]
-    public void ToString_WithTickConstructor_ReturnsDefaultFormattedStringInProvidedCulture(string culture, string expectedResult)
+    [InlineData("en-GB")]
+    [InlineData("en-US")]
+    public void ToString_WithTickConstructor_ReturnsDefaultFormattedStringInProvidedCulture(string culture)
     {
         void Test()
         {
@@ -245,9 +245,11 @@ public class TimeTests
 
             var time = Time.From(ticks);
 
+            var nativeFormattingOutput = new System.TimeOnly(ticks).ToString("T", new CultureInfo(culture));
+
             var timeString = time.ToString(new CultureInfo(culture));
 
-            timeString.Should().BeEquivalentTo(expectedResult);
+            timeString.Should().BeEquivalentTo(nativeFormattingOutput);
         }
 
         TestUtility.RunInInvariantCulture(Test);
@@ -300,35 +302,35 @@ public class TimeTests
     }
 
     [Theory]
-    [InlineData("en-US", "h:mm", "3:05")]
-    [InlineData("en-US", "hh:mm", "03:05")]
-    [InlineData("en-US", "HH:mm", "03:05")]
-    [InlineData("en-US", "h:mm tt", "3:05 AM")]
-    [InlineData("en-US", "hh:mm tt", "03:05 AM")]
-    [InlineData("en-US", "HH:mm tt", "03:05 AM")]
-    [InlineData("en-US", "HH:mm:ss", "03:05:52")]
-    [InlineData("en-US", "hh:mm:ss", "03:05:52")]
-    [InlineData("en-US", "hh:mm:ss fff", "03:05:52 500")]
-    [InlineData("en-US", "HH:mm:ss fff", "03:05:52 500")]
-    [InlineData("en-US", "hh:mm:ss fff tt", "03:05:52 500 AM")]
-    [InlineData("en-US", "HH:mm:ss fff tt", "03:05:52 500 AM")]
-    [InlineData("en-US", "t", "3:05 AM")]
-    [InlineData("en-US", "T", "3:05:52 AM")]
-    [InlineData("en-GB", "h:mm", "3:05")]
-    [InlineData("en-GB", "hh:mm", "03:05")]
-    [InlineData("en-GB", "HH:mm", "03:05")]
-    [InlineData("en-GB", "h:mm tt", "3:05 AM")]
-    [InlineData("en-GB", "hh:mm tt", "03:05 AM")]
-    [InlineData("en-GB", "HH:mm tt", "03:05 AM")]
-    [InlineData("en-GB", "HH:mm:ss", "03:05:52")]
-    [InlineData("en-GB", "hh:mm:ss", "03:05:52")]
-    [InlineData("en-GB", "hh:mm:ss fff", "03:05:52 500")]
-    [InlineData("en-GB", "HH:mm:ss fff", "03:05:52 500")]
-    [InlineData("en-GB", "hh:mm:ss fff tt", "03:05:52 500 AM")]
-    [InlineData("en-GB", "HH:mm:ss fff tt", "03:05:52 500 AM")]
-    [InlineData("en-GB", "t", "03:05")]
-    [InlineData("en-GB", "T", "03:05:52")]
-    public void ToString_WithTickConstructor_ReturnsFormattedStringInProvidedCulture(string culture, string format, string expectedResult)
+    [InlineData("en-US", "h:mm")]
+    [InlineData("en-US", "hh:mm")]
+    [InlineData("en-US", "HH:mm")]
+    [InlineData("en-US", "h:mm tt")]
+    [InlineData("en-US", "hh:mm tt")]
+    [InlineData("en-US", "HH:mm tt")]
+    [InlineData("en-US", "HH:mm:ss")]
+    [InlineData("en-US", "hh:mm:ss")]
+    [InlineData("en-US", "hh:mm:ss fff")]
+    [InlineData("en-US", "HH:mm:ss fff")]
+    [InlineData("en-US", "hh:mm:ss fff tt")]
+    [InlineData("en-US", "HH:mm:ss fff tt")]
+    [InlineData("en-US", "t")]
+    [InlineData("en-US", "T")]
+    [InlineData("en-GB", "h:mm")]
+    [InlineData("en-GB", "hh:mm")]
+    [InlineData("en-GB", "HH:mm")]
+    [InlineData("en-GB", "h:mm tt")]
+    [InlineData("en-GB", "hh:mm tt")]
+    [InlineData("en-GB", "HH:mm tt")]
+    [InlineData("en-GB", "HH:mm:ss")]
+    [InlineData("en-GB", "hh:mm:ss")]
+    [InlineData("en-GB", "hh:mm:ss fff")]
+    [InlineData("en-GB", "HH:mm:ss fff")]
+    [InlineData("en-GB", "hh:mm:ss fff tt")]
+    [InlineData("en-GB", "HH:mm:ss fff tt")]
+    [InlineData("en-GB", "t")]
+    [InlineData("en-GB", "T")]
+    public void ToString_WithTickConstructor_ReturnsFormattedStringInProvidedCulture(string culture, string format)
     {
         void Test()
         {
@@ -336,9 +338,11 @@ public class TimeTests
 
             var time = Time.From(ticks);
 
+            var nativeFormattingOutput = new System.TimeOnly(ticks).ToString(format, new CultureInfo(culture));
+
             var timeString = time.ToString(format, new CultureInfo(culture));
 
-            timeString.Should().BeEquivalentTo(expectedResult);
+            timeString.Should().BeEquivalentTo(nativeFormattingOutput);
         }
 
         TestUtility.RunInCulture(Test, culture);
@@ -368,9 +372,9 @@ public class TimeTests
     }
 
     [Theory]
-    [InlineData("en-GB", "13:05:52")]
-    [InlineData("en-US", "1:05:52 PM")]
-    public void ToString_WithNoFormatParameter_ReturnsDefaultFormattedStringInProvidedCulture(string culture, string expectedResult)
+    [InlineData("en-GB")]
+    [InlineData("en-US")]
+    public void ToString_WithNoFormatParameter_ReturnsDefaultFormattedStringInProvidedCulture(string culture)
     {
         void Test()
         {
@@ -380,9 +384,11 @@ public class TimeTests
             int millisecond = 500;
             var time = Time.From(hour, minute, second, millisecond);
 
+            var nativeFormattingOutput = new System.TimeOnly(hour, minute, second, millisecond).ToString("T", new CultureInfo(culture));
+
             var timeString = time.ToString(new CultureInfo(culture));
 
-            timeString.Should().BeEquivalentTo(expectedResult);
+            timeString.Should().BeEquivalentTo(nativeFormattingOutput);
         }
 
         TestUtility.RunInCulture(Test, culture);
@@ -436,35 +442,35 @@ public class TimeTests
     }
 
     [Theory]
-    [InlineData("en-US", "h:mm", "1:05")]
-    [InlineData("en-US", "hh:mm", "01:05")]
-    [InlineData("en-US", "HH:mm", "13:05")]
-    [InlineData("en-US", "h:mm tt", "1:05 PM")]
-    [InlineData("en-US", "hh:mm tt", "01:05 PM")]
-    [InlineData("en-US", "HH:mm tt", "13:05 PM")]
-    [InlineData("en-US", "HH:mm:ss", "13:05:52")]
-    [InlineData("en-US", "hh:mm:ss", "01:05:52")]
-    [InlineData("en-US", "hh:mm:ss fff", "01:05:52 500")]
-    [InlineData("en-US", "HH:mm:ss fff", "13:05:52 500")]
-    [InlineData("en-US", "hh:mm:ss fff tt", "01:05:52 500 PM")]
-    [InlineData("en-US", "HH:mm:ss fff tt", "13:05:52 500 PM")]
-    [InlineData("en-US", "t", "1:05 PM")]
-    [InlineData("en-US", "T", "1:05:52 PM")]
-    [InlineData("en-GB", "h:mm", "1:05")]
-    [InlineData("en-GB", "hh:mm", "01:05")]
-    [InlineData("en-GB", "HH:mm", "13:05")]
-    [InlineData("en-GB", "h:mm tt", "1:05 pm")]
-    [InlineData("en-GB", "hh:mm tt", "01:05 pm")]
-    [InlineData("en-GB", "HH:mm tt", "13:05 pm")]
-    [InlineData("en-GB", "HH:mm:ss", "13:05:52")]
-    [InlineData("en-GB", "hh:mm:ss", "01:05:52")]
-    [InlineData("en-GB", "hh:mm:ss fff", "01:05:52 500")]
-    [InlineData("en-GB", "HH:mm:ss fff", "13:05:52 500")]
-    [InlineData("en-GB", "hh:mm:ss fff tt", "01:05:52 500 pm")]
-    [InlineData("en-GB", "HH:mm:ss fff tt", "13:05:52 500 pm")]
-    [InlineData("en-GB", "t", "13:05")]
-    [InlineData("en-GB", "T", "13:05:52")]
-    public void ToString_WithFormatParameter_ReturnsFormattedStringInProvidedCulture(string culture, string format, string expectedResult)
+    [InlineData("en-US", "h:mm")]
+    [InlineData("en-US", "hh:mm")]
+    [InlineData("en-US", "HH:mm")]
+    [InlineData("en-US", "h:mm tt")]
+    [InlineData("en-US", "hh:mm tt")]
+    [InlineData("en-US", "HH:mm tt")]
+    [InlineData("en-US", "HH:mm:ss")]
+    [InlineData("en-US", "hh:mm:ss")]
+    [InlineData("en-US", "hh:mm:ss fff")]
+    [InlineData("en-US", "HH:mm:ss fff")]
+    [InlineData("en-US", "hh:mm:ss fff tt")]
+    [InlineData("en-US", "HH:mm:ss fff tt")]
+    [InlineData("en-US", "t")]
+    [InlineData("en-US", "T")]
+    [InlineData("en-GB", "h:mm")]
+    [InlineData("en-GB", "hh:mm")]
+    [InlineData("en-GB", "HH:mm")]
+    [InlineData("en-GB", "h:mm tt")]
+    [InlineData("en-GB", "hh:mm tt")]
+    [InlineData("en-GB", "HH:mm tt")]
+    [InlineData("en-GB", "HH:mm:ss")]
+    [InlineData("en-GB", "hh:mm:ss")]
+    [InlineData("en-GB", "hh:mm:ss fff")]
+    [InlineData("en-GB", "HH:mm:ss fff")]
+    [InlineData("en-GB", "hh:mm:ss fff tt")]
+    [InlineData("en-GB", "HH:mm:ss fff tt")]
+    [InlineData("en-GB", "t")]
+    [InlineData("en-GB", "T")]
+    public void ToString_WithFormatParameter_ReturnsFormattedStringInProvidedCulture(string culture, string format)
     {
         void Test()
         {
@@ -474,9 +480,11 @@ public class TimeTests
             int millisecond = 500;
             var time = Time.From(hour, minute, second, millisecond);
 
+            var nativeFormattingOutput = new System.TimeOnly(hour, minute, second, millisecond).ToString(format, new CultureInfo(culture));
+
             var timeString = time.ToString(format, new CultureInfo(culture));
 
-            timeString.Should().BeEquivalentTo(expectedResult);
+            timeString.Should().BeEquivalentTo(nativeFormattingOutput);
         }
 
         TestUtility.RunInCulture(Test, culture);

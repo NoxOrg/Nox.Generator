@@ -11,8 +11,6 @@ internal class RouteMatcher
 
     private readonly ApiRouteMapping _apiRoute;
 
-    private IDictionary<string, string>? _values;
-
     private const int _slash = 47;
 
     public RouteMatcher(ApiRouteMapping apiRoute, string prefix)
@@ -33,19 +31,21 @@ internal class RouteMatcher
 
     internal ApiRouteMapping ApiRoute => _apiRoute;
 
-    public bool Match(HttpRequest httpRequest)
+    public bool Match(HttpRequest httpRequest, out IDictionary<string, string>? paramValues)
     {
+        paramValues = null;
         var isMatch = _matcher.Match($"{httpRequest.Path}{httpRequest.QueryString}", out var values);
 
-        _values = values;
+        if(isMatch)
+            paramValues = values;
 
         return isMatch;
     }
 
-    public string TransformTo(string toPath)
+    public string TransformTo(string toPath, IDictionary<string, string>? paramValues)
     {
-        if (_values is null) return toPath;
+        if (paramValues is null) return toPath;
 
-        return _matcher.TransformTo(toPath, _values);
+        return _matcher.TransformTo(toPath, paramValues);
     }
 }
